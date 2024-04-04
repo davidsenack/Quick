@@ -1,5 +1,6 @@
 import os
 import sys
+import subprocess
 
 from lexer import Lexer
 from parser import Parser
@@ -15,6 +16,13 @@ def write_output_file(content, filename):
         os.makedirs(output_dir)
     with open(filename, 'w') as file:
         file.write(content)
+
+def compile_c_code(c_file_path, output_executable_name):
+    try:
+        subprocess.run(['gcc', c_file_path, '-o', output_executable_name, '-lgmp'], check=True)
+        print(f"Compiled successfully. Executable: {output_executable_name}")
+    except subprocess.CalledProcessError as e:
+        print(f"Compilation failed: {e}")
 
 def build_project(project_name):
     # Step 1: Read the input file
@@ -37,6 +45,10 @@ def build_project(project_name):
     output_filename = f'output/{project_name}.c'
     write_output_file(c_code, output_filename)
     
+    # Compile the generated C code
+    executable_name = f'output/{project_name}'
+    compile_c_code(output_filename, executable_name)
+
     print(f'Transpiled C code has been written to {output_filename}')
 
 def main():

@@ -1,4 +1,6 @@
 import os
+import sys
+
 from lexer import Lexer
 from parser import Parser
 from transpiler import Transpiler
@@ -14,9 +16,9 @@ def write_output_file(content, filename):
     with open(filename, 'w') as file:
         file.write(content)
 
-def main():
+def build_project(project_name):
     # Step 1: Read the input file
-    input_filename = 'input/fibonacci.quick'
+    input_filename = f'input/{project_name}.quick'
     input_code = read_input_file(input_filename)
     
     # Step 2: Tokenize the input
@@ -32,10 +34,17 @@ def main():
     c_code = transpiler.transpile(ast)
     
     # Step 5: Write the output C code
-    output_filename = 'output/output.c'
+    output_filename = f'output/{project_name}.c'
     write_output_file(c_code, output_filename)
     
     print(f'Transpiled C code has been written to {output_filename}')
+
+def main():
+    if len(sys.argv) != 3 or sys.argv[1] != "build":
+        print("Usage: quick build <project_name>")
+        sys.exit(1)
+    project_name = sys.argv[2]
+    build_project(project_name)
 
 if __name__ == '__main__':
     main()

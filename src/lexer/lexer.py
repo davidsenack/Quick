@@ -15,8 +15,15 @@ TOKEN_TYPES = [
     ('MUL',      r'\*'),
     ('DIV',      r'/'),
     ('NEWLINE',  r'\n'),
-    ('SKIP',     r'[ \t]+'),  # Skip over spaces and tabs
+    ('SKIP',     r'[ \t\r]+'),  # Skip over spaces, tabs, and carriage returns
     ('MISMATCH', r'.'),       # Any other character
+    ('KEYWORD_FN', r'\bfn\b'),  # Keyword for function declaration
+    ('KEYWORD_IF', r'\bif\b'),  # Keyword for if statement
+    ('KEYWORD_RETURN', r'\breturn\b'),  # Keyword for return statement
+    ('KEYWORD_PUB', r'\bpub\b'),  # Keyword for public function declaration
+    ('COLON', r':'),  # Colon character
+    ('ARROW', r'->'),  # Arrow used in function return type declaration
+    ('INT_TYPE', r'\bint\b'),  # Integer type declaration
 ]
 
 class Token:
@@ -47,19 +54,3 @@ class Lexer:
             else:
                 raise SyntaxError(f'Illegal character: {self.text[self.pos]}')
         return self.tokens
-
-# Example usage
-if __name__ == '__main__':
-    input_code = '''
-    fn fibonacci(n: int) -> int {
-        if n <= 2 {
-            return n
-        }
-        return fibonacci(n-1) + fibonacci(n-2)
-    }
-    '''
-
-    lexer = Lexer(input_code)
-    tokens = lexer.tokenize()
-    for token in tokens:
-        print(token)

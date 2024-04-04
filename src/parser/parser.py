@@ -1,5 +1,5 @@
-from lexer import Lexer, Token
-from ast import *
+from lexer.lexer import Lexer, Token
+from ast.ast import *
 
 class Parser:
     def __init__(self, tokens):
@@ -18,34 +18,49 @@ class Parser:
     def program(self):
         functions = []
         while self.current_token_index < len(self.tokens):
-            functions.append(self.function())
+            if self.tokens[self.current_token_index].type == 'KEYWORD_FN':
+                functions.append(self.function())
+            else:
+                self.current_token_index += 1  # Skip unexpected tokens
         return Program(functions)
 
     def function(self):
-        self.eat('IDENT')  # 'fn'
+        self.eat('KEYWORD_FN')
+        is_public = False
+        if self.tokens[self.current_token_index].type == 'KEYWORD_PUB':
+            is_public = True
+            self.eat('KEYWORD_PUB')
         name = self.tokens[self.current_token_index].value
         self.eat('IDENT')  # function name
         self.eat('LPAREN')
         # Skipping parameters parsing for simplicity
         self.eat('RPAREN')
+        self.eat('ARROW')
+        return_type = self.tokens[self.current_token_index].value
+        self.eat('INT_TYPE')  # Assuming return type is always int for simplicity
         self.eat('LBRACE')
         body = []
         while self.tokens[self.current_token_index].type != 'RBRACE':
-            if self.tokens[self.current_token_index].type == 'IDENT' and self.tokens[self.current_token_index + 1].value == 'if':
+            if self.tokens[self.current_token_index].type == 'KEYWORD_IF':
                 body.append(self.if_statement())
-            else:
+            elif self.tokens[self.current_token_index].type == 'KEYWORD_RETURN':
                 body.append(self.return_statement())
+            else:
+                self.current_token_index += 1  # Skip unexpected tokens
         self.eat('RBRACE')
-        return Function(name, [], 'int', body)  # Simplified: no params, return type always int
+        return Function(name, [], return_type, body, is_public)  # Simplified: no params
 
     def if_statement(self):
-        self.eat('IDENT')  # 'if'
+        self.eat('KEYWORD_IF')
         condition = self.expression()
-        then_branch = self.return_statement()
+        then_branch = []
+        while self.tokens[self.current_token_index].type != 'KEYWORD_RETURN':
+            self.current_token_index += 1  # Skip to return statement for simplicity
+        then_branch.append(self.return_statement())
         return IfStatement(condition, then_branch)
 
     def return_statement(self):
-        self.eat('IDENT')  # 'return'
+        self.eat('KEYWORD_RETURN')
         expression = self.expression()
         self.eat('SEMICOL')
         return ReturnStatement(expression)
@@ -70,8 +85,3 @@ class Parser:
             return Identifier(token.value)
         else:
             raise Exception("Unexpected token type")
-
-# Example usage
-if __name__ == '__main__':
-    lexer = Lexer('''
-    fn fibonacci(n: int) -> int {

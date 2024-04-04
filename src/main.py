@@ -2,9 +2,9 @@ import os
 import sys
 import subprocess
 
-from lexer import Lexer
-from parser import Parser
-from transpiler import Transpiler
+from lexer.lexer import Lexer
+from parser.parser import Parser
+from transpiler.transpiler import Transpiler
 
 def read_input_file(filename):
     with open(filename, 'r') as file:
@@ -19,14 +19,15 @@ def write_output_file(content, filename):
 
 def compile_c_code(c_file_path, output_executable_name):
     try:
-        subprocess.run(['gcc', c_file_path, '-o', output_executable_name, '-lgmp'], check=True)
+        subprocess.run(['gcc', '-Ofast', c_file_path, '-o', output_executable_name, '-lgmp'], check=True)
         print(f"Compiled successfully. Executable: {output_executable_name}")
     except subprocess.CalledProcessError as e:
         print(f"Compilation failed: {e}")
 
 def build_project(project_name):
     # Step 1: Read the input file
-    input_filename = f'input/{project_name}.quick'
+    input_filename = f'examples/{project_name}.quick'  # Changed path to match the new location
+    # print(os.path.abspath(input_filename))  # Add this line to print the absolute path
     input_code = read_input_file(input_filename)
     
     # Step 2: Tokenize the input
@@ -42,7 +43,7 @@ def build_project(project_name):
     c_code = transpiler.transpile(ast)
     
     # Step 5: Write the output C code
-    output_filename = f'output/{project_name}.c'
+    output_filename = f'output/{project_name}.c'  # Assuming output directory is at the root
     write_output_file(c_code, output_filename)
     
     # Compile the generated C code

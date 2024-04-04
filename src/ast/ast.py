@@ -6,11 +6,12 @@ class Program(ASTNode):
         self.functions = functions
 
 class Function(ASTNode):
-    def __init__(self, name, params, return_type, body):
+    def __init__(self, name, params, return_type, body, is_public=False):
         self.name = name
         self.params = params
         self.return_type = return_type
         self.body = body
+        self.is_public = is_public
 
 class IfStatement(ASTNode):
     def __init__(self, condition, then_branch, else_branch=None):
@@ -30,7 +31,7 @@ class BinaryOperation(ASTNode):
 
 class Number(ASTNode):
     def __init__(self, value):
-        self.value = value
+        self.value = int(value)  # Ensure the value is stored as an integer
 
 class Identifier(ASTNode):
     def __init__(self, value):

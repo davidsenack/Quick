@@ -6,6 +6,7 @@ fn fibonacci(n: int) -> int {
 }
 
 fn pub main() -> int {
-    println(fibonacci(10))
+    var x: int = 10
+    println(fibonacci(x))
     return 0
 }

@@ -2,28 +2,36 @@ import re
 
 # Token types
 TOKEN_TYPES = [
-    ('NUMBER',   r'\d+'),
-    ('IDENT',    r'[a-zA-Z_][a-zA-Z0-9_]*'),
-    ('ASSIGN',   r'='),
-    ('SEMICOL',  r';'),
-    ('LPAREN',   r'\('),
-    ('RPAREN',   r'\)'),
-    ('LBRACE',   r'\{'),
-    ('RBRACE',   r'\}'),
-    ('PLUS',     r'\+'),
-    ('MINUS',    r'-'),
-    ('MUL',      r'\*'),
-    ('DIV',      r'/'),
-    ('NEWLINE',  r'\n'),
-    ('SKIP',     r'[ \t\r]+'),  # Skip over spaces, tabs, and carriage returns
-    ('MISMATCH', r'.'),       # Any other character
+    # Keywords
     ('KEYWORD_FN', r'\bfn\b'),  # Keyword for function declaration
+    ('KEYWORD_PUB', r'\bpub\b'),  # Keyword for public function declaration
+    ('KEYWORD_VAR', r'\bvar\b'),  # Keyword for variable declaration
     ('KEYWORD_IF', r'\bif\b'),  # Keyword for if statement
     ('KEYWORD_RETURN', r'\breturn\b'),  # Keyword for return statement
-    ('KEYWORD_PUB', r'\bpub\b'),  # Keyword for public function declaration
-    ('COLON', r':'),  # Colon character
-    ('ARROW', r'->'),  # Arrow used in function return type declaration
+    ('KEYWORD_PRINTLN', r'\bprintln\b'),  # Keyword for println function
+    # Types
     ('INT_TYPE', r'\bint\b'),  # Integer type declaration
+    # Operators and punctuation
+    ('ASSIGN', r'='),  # Assignment operator
+    ('ARROW', r'->'),  # Arrow used in function return type declaration
+    ('LESS_THAN', r'<'),
+    ('GREATER_THAN', r'>'),
+    ('SEMICOL', r';'),  # Semicolon
+    ('COLON', r':'),  # Colon character
+    ('LPAREN', r'\('),  # Left parenthesis
+    ('RPAREN', r'\)'),  # Right parenthesis
+    ('LBRACE', r'\{'),  # Left brace
+    ('RBRACE', r'\}'),  # Right brace
+    ('PLUS', r'\+'),  # Plus operator
+    ('MINUS', r'-'),  # Minus operator
+    ('MUL', r'\*'),  # Multiplication operator
+    ('DIV', r'/'),  # Division operator
+    # Other
+    ('NUMBER', r'\d+'),  # Number
+    ('IDENT', r'[a-zA-Z_][a-zA-Z0-9_]*'),  # Identifier
+    ('NEWLINE', r'\n'),  # Newline
+    ('SKIP', r'[ \t\r]+'),  # Skip over spaces, tabs, and carriage returns
+    # Removed MISMATCH token to avoid catching valid characters in incorrect contexts
 ]
 
 class Token:

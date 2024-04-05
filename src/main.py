@@ -33,17 +33,21 @@ def build_project(project_name):
     # Step 2: Tokenize the input
     lexer = Lexer(input_code)
     tokens = lexer.tokenize()
-    
+    print(tokens)
     # Step 3: Parse the tokens into an AST
     parser = Parser(tokens)
     ast = parser.parse()
-    
+   
     # Step 4: Transpile the AST into C code
     transpiler = Transpiler()
+
     c_code = transpiler.transpile(ast)
-    
+
     # Step 5: Write the output C code
     output_filename = f'output/{project_name}.c'  # Assuming output directory is at the root
+    if not c_code.strip():  # Check if the transpiled C code is not empty or just whitespace
+        print("Error: No C code generated from transpilation.")
+        return
     write_output_file(c_code, output_filename)
     
     # Compile the generated C code

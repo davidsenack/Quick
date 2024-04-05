@@ -45,8 +45,8 @@ fn pub main() -> int {
 
 ```
 ```bash
-**david@quicklang:~$** quick build fibonacci
-**david@quicklang:~$** time ./fibonacci
+__david@quicklang:~$__ quick build fibonacci
+__david@quicklang:~$__ time ./fibonacci
 
 real    0m5.487s
 user    0m5.487s

@@ -13,6 +13,11 @@ class Function(ASTNode):
         self.body = body
         self.is_public = is_public
 
+class Parameter(ASTNode):
+    def __init__(self, name, param_type):
+        self.name = name
+        self.param_type = param_type
+
 class IfStatement(ASTNode):
     def __init__(self, condition, then_branch, else_branch=None):
         self.condition = condition
@@ -36,3 +41,7 @@ class Number(ASTNode):
 class Identifier(ASTNode):
     def __init__(self, value):
         self.value = value
+
+class VariableReference(ASTNode):
+    def __init__(self, name):
+        self.name = name
